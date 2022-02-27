@@ -1,3 +1,6 @@
+// Router
+export { Router } from './router';
+
 // Screens
 export { Dashboard } from './screens/dashboard';
 export { EditEntry } from './screens/editEntry';

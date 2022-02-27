@@ -1,8 +1,14 @@
 import React from 'react';
-import { Login } from './src';
+import Router from './src/router';
 
 const App = () => {
-	return <Login />;
+	const isLoggedIn = false;
+	const isLoading = false;
+
+	return <Router
+		isLoggedIn = { isLoggedIn }
+		isLoading = { isLoading }
+	/>;
 };
 
 export default App;
