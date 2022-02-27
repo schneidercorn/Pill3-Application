@@ -65,3 +65,5 @@ buck-out/
 # bundle? idk lol
 .bundle
 
+# firebase key
+android/app/google-services.json
