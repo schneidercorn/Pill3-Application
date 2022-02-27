@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@react-native-firebase/app": "^14.5.0",
+    "@react-native-firebase/firestore": "^14.5.0",
     "react": "17.0.2",
     "react-native": "0.67.2",
-    "react-native-elements": "^3.4.2"
+    "react-native-elements": "^3.4.2",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@babel/core": "7.17.2",
