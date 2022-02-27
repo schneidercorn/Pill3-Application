@@ -10,26 +10,26 @@ const AuthStack = createStackNavigator();
 const OnboardingStack = createStackNavigator();
 const MainStack = createStackNavigator();
 
-const OnboardingStackNavigator = () => {
+const OnboardingStackNavigator = () => (
 	<OnboardingStack.Navigator screenOptions = {{ headerShown: false }}>
 		<OnboardingStack.Screen name = 'Splash' component = { Splash } />
-	</OnboardingStack.Navigator>;
-};
+	</OnboardingStack.Navigator>
+);
 
-const AuthStackNavigator = () => {
+const AuthStackNavigator = () => (
 	<AuthStack.Navigator screenOptions = {{ headerShown: false }}>
 		<AuthStack.Screen name = 'Login' component = { Login } />
 		<AuthStack.Screen name = 'Register' component = { Register } />
-	</AuthStack.Navigator>;
-};
+	</AuthStack.Navigator>
+);
 
-const MainStackNavigator = () => {
+const MainStackNavigator = () => (
 	<MainStack.Navigator screenOptions = {{ headerShown: false }}>
 		<MainStack.Screen name = 'Dashboard' component = { Dashboard } />
 		<MainStack.Screen name = 'Info' component = { Info } />
 		<MainStack.Screen name = 'EditEntry' component = { EditEntry } />
-	</MainStack.Navigator>;
-};
+	</MainStack.Navigator>
+);
 
 export default ({ isLoading, isLoggedIn }) => (
 	<NavigationContainer>

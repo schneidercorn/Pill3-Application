@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import * as userService from '../index';
 
-export const Login = () => {
+export const Login = ({ navigation }) => {
 	const [error, setError] = useState('');
 	const [serial, setSerial] = useState('');
 
@@ -26,6 +26,14 @@ export const Login = () => {
 						setError('Login Failed.');
 				} }
 			/>
+			<Text>
+				{ 'Don\'t have an account? ' }
+				<Text
+					onPress = { () => navigation.navigate('Register') }
+				>
+					Register here
+				</Text>
+			</Text>
 		</View>
 	);
 };
