@@ -19,22 +19,22 @@ export const getUserInfo = async serial => {
 	return await firestore()
 		.collection('serials')
 		.doc(serial)
-		.get()
-		.then(data => data.data());
-};
-
-export const getUserStatus = async serial => {
-	return await firestore()
-		.collection('serials')
-		.doc(serial)
-		.get()
-		.then(data => data.data());
+		.get();
 };
 
 export const serialExists = async serial => {
-	return await firestore()
+	return firestore()
 		.collection('serials')
 		.doc(serial)
 		.get()
-		.then(data => data.exists);
+		.then(data => {
+			if (data.exists) {
+				return ({
+					isLoggedIn: true,
+					serial: `${serial}`
+				});
+			}
+
+			return ({ isLoggedIn: false });
+		});
 };

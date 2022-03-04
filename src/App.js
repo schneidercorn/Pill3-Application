@@ -6,7 +6,7 @@ import Router from './router';
 
 const App = () => {
 	const dispatch = useDispatch();
-	const { isLoggedIn, isLoading } = useSelector(state => state.user);
+	const { isLoggedIn } = useSelector(state => state.user);
 
 	useEffect(() => {
 		dispatch(loadUser());
@@ -14,7 +14,6 @@ const App = () => {
 
 	return <Router
 		isLoggedIn = { isLoggedIn }
-		isLoading = { isLoading }
 	/>;
 };
 
