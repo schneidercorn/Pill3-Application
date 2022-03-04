@@ -1,9 +1,24 @@
-/**
- * @format
- */
+import React, { Component } from 'react';
+import App from './src/App';
+import { AppRegistry } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import reducers from './src/stores';
+import { LogBox } from 'react-native';
 
-import {AppRegistry} from 'react-native';
-import App from './App';
-import {name as appName} from './app.json';
+LogBox.ignoreAllLogs(); // Ignore all log notifications
 
-AppRegistry.registerComponent(appName, () => App);
+export default class Main extends Component {
+	render() {
+		const store = createStore(reducers, {}, applyMiddleware(thunk));
+
+		return (
+			<Provider store = { store }>
+				<App />
+			</Provider>
+		);
+	}
+}
+
+AppRegistry.registerComponent('Pill3', () => Main);

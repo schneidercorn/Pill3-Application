@@ -1,5 +1,5 @@
-// Router
-export { Router } from './router';
+// App
+export { App } from './App';
 
 // Screens
 export { Dashboard } from './screens/dashboard';

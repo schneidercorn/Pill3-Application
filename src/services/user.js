@@ -23,6 +23,14 @@ export const getUserInfo = async serial => {
 		.then(data => data.data());
 };
 
+export const getUserStatus = async serial => {
+	return await firestore()
+		.collection('serials')
+		.doc(serial)
+		.get()
+		.then(data => data.data());
+};
+
 export const serialExists = async serial => {
 	return await firestore()
 		.collection('serials')
