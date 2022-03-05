@@ -55,3 +55,17 @@ export const getPills = async serial => {
 
 	return pills;
 };
+
+export const addPill = async (serial, pill) => {
+	return await firestore()
+		.collection('serials')
+		.doc(serial)
+		.collection('pills')
+		.add(pill)
+		.then(() => {
+			console.log('added pill to database: ' + JSON.stringify(pill));
+
+			return true;
+		})
+		.catch(() => false);
+};
