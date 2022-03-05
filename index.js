@@ -4,7 +4,7 @@ import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import reducers from './src/stores';
+import reducers from './src/ducks';
 import { LogBox } from 'react-native';
 
 LogBox.ignoreAllLogs(); // Ignore all log notifications

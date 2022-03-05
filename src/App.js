@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser } from './stores/userReducers';
+import { loadUser } from './ducks/userReducers';
 import Router from './router';
 
 const App = () => {

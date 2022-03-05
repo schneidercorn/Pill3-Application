@@ -3,16 +3,18 @@ import firestore from '@react-native-firebase/firestore';
 export const createUser = user => {
 	const { name, email, serial } = user;
 
-	firestore()
+	const doc = firestore()
 		.collection('serials')
-		.doc(serial)
-		.set({
-			name: name,
-			email: email
-		})
-		.then(() => {
-			console.log('added ${ name } to firestore.');
-		});
+		.doc(serial);
+
+	// serial document
+	doc.set({
+		name: name,
+		email: email
+	});
+
+	// pills collection
+	doc.collection('pills');
 };
 
 export const getUserInfo = async serial => {

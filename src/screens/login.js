@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 import * as userService from '../index';
-import { userStatus } from '../stores/userReducers';
+import { userStatus } from '../ducks/userReducers';
 
 export const Login = ({ navigation }) => {
 	const [error, setError] = useState('');
@@ -11,10 +11,8 @@ export const Login = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	async function loginSubmit(serial) {
-		return await userService
-			.serialExists(serial)
+		return await userService.serialExists(serial)
 			.then(loginSuccess => {
-				console.log(loginSuccess.isLoggedIn);
 				if (loginSuccess.isLoggedIn == true)
 					dispatch(userStatus(serial));
 
@@ -27,6 +25,7 @@ export const Login = ({ navigation }) => {
 		<View>
 			<Text> { error } </Text>
 			<Input
+				label = 'serial'
 				onChangeText = { serial => setSerial(serial) }
 			/>
 			<Button
