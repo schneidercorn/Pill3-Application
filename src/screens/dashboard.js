@@ -51,6 +51,10 @@ export const Dashboard = ({ navigation }) => {
 				title = 'ADD NEW PILL'
 				onPress = { () => navigation.navigate('EditEntry') }
 			/>
+			<Button
+				title = 'TO ABOUT PAGE'
+				onPress = { () => navigation.navigate('Info') }
+			/>
 		</View>
 	);
 };

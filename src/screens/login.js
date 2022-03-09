@@ -11,7 +11,7 @@ export const Login = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	async function loginSubmit(serial) {
-		return await userService.serialExists(serial)
+		return await userService.loginUser(serial)
 			.then(loginSuccess => {
 				if (loginSuccess.isLoggedIn == true)
 					dispatch(userStatus(serial));

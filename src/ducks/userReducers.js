@@ -1,5 +1,5 @@
 import { createActionTypes } from './utils';
-import { getUserInfo, serialExists } from '../services/user';
+import * as userService from '../services/user';
 
 const ACTIONS = createActionTypes([
 	'USER_STATUS',
@@ -23,10 +23,19 @@ export default (state = INITIAL_STATE, { payload, type }) => {
 };
 
 export const loadUser = () => dispatch => {
-	getUserInfo(payload => dispatch({ type: ACTIONS.LOAD_USER, payload }));
+	userService.getUserInfo(payload =>
+		dispatch({ type: ACTIONS.LOAD_USER, payload })
+	);
 };
 
 export const userStatus = (serial) => dispatch => {
-	serialExists(serial).then(status =>
-		dispatch({ type: ACTIONS.USER_STATUS, payload: status }));
+	userService.loginUser(serial).then(status =>
+		dispatch({ type: ACTIONS.USER_STATUS, payload: status })
+	);
+};
+
+export const logoutUser = () => dispatch => {
+	userService.logoutUser().then(status =>
+		dispatch({ type: ACTIONS.USER_STATUS, payload: status })
+	);
 };

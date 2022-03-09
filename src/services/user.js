@@ -24,7 +24,7 @@ export const getUserInfo = async serial => {
 		.get();
 };
 
-export const serialExists = async serial => {
+export const loginUser = async serial => {
 	return firestore()
 		.collection('serials')
 		.doc(serial)
