@@ -1,7 +1,15 @@
 import firestore from '@react-native-firebase/firestore';
 
-export const createUser = user => {
+export const createUser = async user => {
 	const { name, email, serial } = user;
+	const serialExists = await firestore()
+		.collection('serials')
+		.doc(serial)
+		.get()
+		.then(data => data.exists);
+
+	if (serialExists)
+		return false;
 
 	const doc = firestore()
 		.collection('serials')
@@ -15,6 +23,8 @@ export const createUser = user => {
 
 	// pills collection
 	doc.collection('pills');
+
+	return true;
 };
 
 export const getUserInfo = async serial => {

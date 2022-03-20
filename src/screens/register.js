@@ -12,14 +12,7 @@ export const Register = ({ navigation }) => {
 	const [email, setEmail] = useState('');
 	const dispatch = useDispatch();
 
-	function validateSerial(serialTaken, serial) {
-		// serial number already used
-		if (serialTaken.isLoggedIn == true) {
-			setError('Serial number has already been used');
-
-			return false;
-		}
-
+	function validateSerial(serial) {
 		// serial number contains exactly 9 alphanumerics
 		if (serial.length != 9) {
 			setError('Please enter a valid serial number');
@@ -45,16 +38,12 @@ export const Register = ({ navigation }) => {
 		return true;
 	}
 
-	async function registerSubmit(serial) {
-		return await userService.serialExists(serial)
-			.then(serialTaken => {
-				if (validateSerial(serialTaken, serial) && validateEmail(email)) {
-					setError('');
+	async function registerSubmit(serial, name, email) {
+		if (!validateSerial(serial) && !validateEmail(email))
+			return;
 
-					userService.createUser({ serial, name, email })
-						.then(() => dispatch(userStatus(serial)));
-				}
-			})
+		return await userService.createUser({ serial, name, email })
+			.then(() => dispatch(userStatus(serial)))
 			.catch(error => console.log('ERROR REGISTERING: ' + error));
 	}
 
