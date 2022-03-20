@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as userServices from '../services/user';
+import * as pillServices from '../services/pill';
 import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
@@ -29,7 +30,7 @@ export const Dashboard = ({ navigation }) => {
 	}, []);
 
 	async function getPills(serial) {
-		const pillsData = await userServices.getPills(serial)
+		const pillsData = await pillServices.getPills(serial)
 			.then(pillsData => {
 				console.log(pillsData);
 

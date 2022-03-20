@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as userServices from '../services/user';
+import * as pillServices from '../services/pill';
 import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
@@ -62,7 +63,7 @@ export const EditEntry = ({ navigation }) => {
 			repeatOn: selectedDays
 		};
 
-		return await userServices.addPill(serial, pill);
+		return await pillServices.addPill(serial, pill);
 	}
 
 	return (
