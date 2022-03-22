@@ -7,8 +7,11 @@ import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
 import { Button } from 'react-native-elements';
+import { Navbar } from '../components/navbar';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const Dashboard = ({ navigation }) => {
+	const { container, extendedScrollView } = styles;
 	const { serial } = useSelector(state => state.user);
 	const [ pills, setPills ] = useState([]);
 	const [ isLoaded, setLoaded ] = useState(false);
@@ -44,18 +47,31 @@ export const Dashboard = ({ navigation }) => {
 		return <Text>Loading</Text>;
 
 	return (
-		<View>
-			<Text>
-				{ JSON.stringify(pills, null, 4) }
-			</Text>
-			<Button
-				title = 'ADD NEW PILL'
-				onPress = { () => navigation.navigate('EditEntry') }
-			/>
-			<Button
-				title = 'TO ABOUT PAGE'
-				onPress = { () => navigation.navigate('Info') }
+		<View style = { container }>
+			<ScrollView>
+				<Text>
+					{ JSON.stringify(pills, null, 4) }
+				</Text>
+				<View style = { extendedScrollView } />
+			</ScrollView>
+			<Navbar
+				currentPage = '0'
+				navigation = { navigation }
 			/>
 		</View>
 	);
+};
+
+const styles = {
+	container: {
+		height: '100%',
+		width: '100%',
+		justifyContent: 'space-between',
+		flex: 1,
+		flexDirection: 'column'
+	},
+	extendedScrollView: {
+		height: 200,
+		width: '100%'
+	}
 };

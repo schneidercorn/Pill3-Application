@@ -7,8 +7,10 @@ import * as reduxServices from '../ducks/userReducers';
 import { useState } from 'react';
 import { Button } from 'react-native-elements';
 import * as userService from '../services/user';
+import { Navbar } from '../components/navbar';
 
 export const Info = ({ navigation }) => {
+	const { container } = styles;
 	const { serial } = useSelector(state => state.user);
 	const [ user, setUser ] = useState('');
 	const [ isLoaded, setLoaded ] = useState(false);
@@ -43,18 +45,30 @@ export const Info = ({ navigation }) => {
 		return <Text>Loading</Text>;
 
 	return (
-		<View>
-			<Text>User: { user.name } </Text>
-			<Text>Email: { user.email } </Text>
-			<Text>Device Serial: { serial } </Text>
-			<Button
-				title = 'TO DASHBOARD'
-				onPress = { () => navigation.goBack() }
-			/>
+		<View style = { container }>
+			<View>
+				<Text>User: { user.name } </Text>
+				<Text>Email: { user.email } </Text>
+				<Text>Device Serial: { serial } </Text>
+			</View>
 			<Button
 				title = 'LOG OUT'
 				onPress = { () => logoutUser() }
 			/>
+			<Navbar
+				currentPage = '1'
+				navigation = { navigation }
+			/>
 		</View>
 	);
+};
+
+const styles = {
+	container: {
+		height: '100%',
+		width: '100%',
+		justifyContent: 'space-between',
+		flex: 1,
+		flexDirection: 'column'
+	}
 };
