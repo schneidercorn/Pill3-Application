@@ -50,11 +50,11 @@ export const Info = ({ navigation }) => {
 				<Text>User: { user.name } </Text>
 				<Text>Email: { user.email } </Text>
 				<Text>Device Serial: { serial } </Text>
+				<Button
+					title = 'LOG OUT'
+					onPress = { () => logoutUser() }
+				/>
 			</View>
-			<Button
-				title = 'LOG OUT'
-				onPress = { () => logoutUser() }
-			/>
 			<Navbar
 				currentPage = '1'
 				navigation = { navigation }
