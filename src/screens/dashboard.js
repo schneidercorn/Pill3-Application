@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { Button } from 'react-native-elements';
 import { Navbar } from '../components/navbar';
 import { ScrollView } from 'react-native-gesture-handler';
+import { styles } from '../styles';
 
 export const Dashboard = ({ navigation }) => {
 	const { container, extendedScrollView } = styles;
@@ -60,18 +61,4 @@ export const Dashboard = ({ navigation }) => {
 			/>
 		</View>
 	);
-};
-
-const styles = {
-	container: {
-		height: '100%',
-		width: '100%',
-		justifyContent: 'space-between',
-		flex: 1,
-		flexDirection: 'column'
-	},
-	extendedScrollView: {
-		height: 200,
-		width: '100%'
-	}
 };

@@ -9,9 +9,10 @@ import { useState } from 'react';
 import { Button, ButtonGroup, Input } from 'react-native-elements';
 import { Navbar } from '../components/navbar';
 import { ScrollView } from 'react-native-gesture-handler';
+import { styles } from '../styles';
 
 export const EditEntry = ({ navigation }) => {
-	const { container, extendedScrollView } = styles;
+	const { container, extendedScrollView, scrollForm } = styles;
 	const [ slot, setSlot ] = useState(1);
 	const [ name, setName ] = useState('');
 	const [ dosage, setDosage ] = useState('');
@@ -71,9 +72,9 @@ export const EditEntry = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
-			<ScrollView>
+			<ScrollView contentContainerStyle = { scrollForm }>
 				<Input
-					label = 'Name'
+					label = 'Pill Name'
 					onChangeText = { name => setName(name) }
 				/>
 				<Input
@@ -87,8 +88,8 @@ export const EditEntry = ({ navigation }) => {
 						setSlot(value);
 					} }
 				/>
+				<Text> Doses per Day: { dosesPerDay } </Text>
 				<View>
-					<Text> Doses per Day: { dosesPerDay } </Text>
 					{ /* increase dosesPerDay */ }
 					<Button
 						title = '+'
@@ -136,18 +137,4 @@ export const EditEntry = ({ navigation }) => {
 			/>
 		</View>
 	);
-};
-
-const styles = {
-	container: {
-		height: '100%',
-		width: '100%',
-		justifyContent: 'space-between',
-		flex: 1,
-		flexDirection: 'column'
-	},
-	extendedScrollView: {
-		height: 200,
-		width: '100%'
-	}
 };

@@ -8,9 +8,11 @@ import { useState } from 'react';
 import { Button } from 'react-native-elements';
 import * as userService from '../services/user';
 import { Navbar } from '../components/navbar';
+import { styles } from '../styles';
+import { LinearGradient } from 'react-native-svg';
 
 export const Info = ({ navigation }) => {
-	const { container } = styles;
+	const { container, form, center, rowAlign } = styles;
 	const { serial } = useSelector(state => state.user);
 	const [ user, setUser ] = useState('');
 	const [ isLoaded, setLoaded ] = useState(false);
@@ -46,14 +48,20 @@ export const Info = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
-			<View>
-				<Text>User: { user.name } </Text>
-				<Text>Email: { user.email } </Text>
-				<Text>Device Serial: { serial } </Text>
+			<View style = { rowAlign }>
 				<Button
+					buttonStyle = {{ backgroundColor: 'red' }}
 					title = 'LOG OUT'
 					onPress = { () => logoutUser() }
 				/>
+				<View />
+			</View>
+			<View style = { form }>
+				<View style = { center }>
+					<Text>User: { user.name } </Text>
+					<Text>Email: { user.email } </Text>
+					<Text>Device Serial: { serial } </Text>
+				</View>
 			</View>
 			<Navbar
 				currentPage = '1'
@@ -61,14 +69,4 @@ export const Info = ({ navigation }) => {
 			/>
 		</View>
 	);
-};
-
-const styles = {
-	container: {
-		height: '100%',
-		width: '100%',
-		justifyContent: 'space-between',
-		flex: 1,
-		flexDirection: 'column'
-	}
 };

@@ -4,8 +4,10 @@ import { Button, Input } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 import * as userService from '../index';
 import { userStatus } from '../ducks/userReducers';
+import { styles } from '../styles';
 
 export const Login = ({ navigation }) => {
+	const { container, form, header } = styles;
 	const [error, setError] = useState('');
 	const [serial, setSerial] = useState('');
 	const dispatch = useDispatch();
@@ -22,24 +24,27 @@ export const Login = ({ navigation }) => {
 	}
 
 	return (
-		<View>
-			<Text> { error } </Text>
-			<Input
-				label = 'serial'
-				onChangeText = { serial => setSerial(serial) }
-			/>
-			<Button
-				title = 'LOGIN'
-				onPress = { () => loginSubmit(serial) }
-			/>
-			<Text>
-				{ 'Don\'t have an account? ' }
-				<Text
-					onPress = { () => navigation.navigate('Register') }
-				>
-					Register here
+		<View style = { container }>
+			<View style = { header }>
+
+			</View>
+			<View style = { form }>
+				<Text> { error } </Text>
+				<Input
+					label = 'serial'
+					onChangeText = { serial => setSerial(serial) }
+				/>
+				<Button
+					title = 'LOGIN'
+					onPress = { () => loginSubmit(serial) }
+				/>
+				<Text>
+					{ 'Don\'t have an account? ' }
+					<Text onPress = { () => navigation.navigate('Register') } >
+						Register here
+					</Text>
 				</Text>
-			</Text>
+			</View>
 		</View>
 	);
 };
