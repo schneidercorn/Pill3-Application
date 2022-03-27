@@ -12,7 +12,7 @@ import { styles } from '../styles';
 import { LinearGradient } from 'react-native-svg';
 
 export const Info = ({ navigation }) => {
-	const { container, form, center, rowAlign } = styles;
+	const { container, form, center, reverseRowAlign } = styles;
 	const { serial } = useSelector(state => state.user);
 	const [ user, setUser ] = useState('');
 	const [ isLoaded, setLoaded ] = useState(false);
@@ -48,7 +48,7 @@ export const Info = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
-			<View style = { rowAlign }>
+			<View style = { reverseRowAlign }>
 				<Button
 					buttonStyle = {{ backgroundColor: 'red' }}
 					title = 'LOG OUT'

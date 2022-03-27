@@ -15,13 +15,14 @@ export const styles = {
 	scrollForm: {
 		width: '100%',
 		justifyContent: 'space-around',
-		flexDirection: 'column'
+		flexDirection: 'column',
+		alignItems: 'center'
 	},
 	center: {
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
-	rowAlign: {
+	reverseRowAlign: {
 		height: 75,
 		width: '100%',
 		alignItems: 'center',
@@ -36,11 +37,10 @@ export const styles = {
 		height: 200,
 		width: '100%'
 	},
-	buttonRow: {
-		alignItems: 'center',
-		height: 75,
+	rowAlign: {
 		width: '100%',
+		flex: 1,
 		flexDirection: 'row',
-		marginRight: '-5%'
+		justifyContent: 'space-evenly'
 	}
 };

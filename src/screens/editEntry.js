@@ -1,18 +1,19 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as userServices from '../services/user';
 import * as pillServices from '../services/pill';
 import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
-import { Button, ButtonGroup, Input } from 'react-native-elements';
+import { Button, ButtonGroup, Divider, Input } from 'react-native-elements';
 import { Navbar } from '../components/navbar';
 import { ScrollView } from 'react-native-gesture-handler';
 import { styles } from '../styles';
+import DatePicker from 'react-native-date-picker';
 
 export const EditEntry = ({ navigation }) => {
-	const { container, extendedScrollView, scrollForm } = styles;
+	const { container, extendedScrollView, scrollForm, rowAlign } = styles;
 	const [ slot, setSlot ] = useState(1);
 	const [ name, setName ] = useState('');
 	const [ dosage, setDosage ] = useState('');
@@ -22,11 +23,12 @@ export const EditEntry = ({ navigation }) => {
 	const { serial } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
-	useEffect(async () => {
+	useEffect(() => {
 		dispatch(loadUser());
 	}, []);
 
 	function renderDosesPerDayFields() {
+		const [date, setDate] = useState(new Date());
 		let ids = [ 1 ];
 		const length = dosesThroughDay.length;
 
@@ -34,7 +36,7 @@ export const EditEntry = ({ navigation }) => {
 		 * i can't believe this works, but im not changing it unless neccessary.
 		 *
 		 * all it does is allows the link between id and dosesPerDay so we can
-		 * easily manage their relationship with the <Input /> fields
+		 * easily manage their relationship with the <DateTimePickerModal /> fields
 		 */
 		if (length == 1) ids = [ 1 ];
 		if (length == 2) ids = [ 1, 2 ];
@@ -43,17 +45,26 @@ export const EditEntry = ({ navigation }) => {
 
 		return (
 			ids.map(id =>
-				<Input
-					key = { id }
-					label = 'Time'
-					onChangeText = { input => {
-						const newArray = dosesThroughDay;
+				<>
+					<Text> { 'Dispense #' + id } </Text>
+					<DatePicker
+						mode = 'time'
+						date = { date }
+						minuteInterval = { 5 }
+						timeZoneOffsetInMinutes = { -240 }
+						onDateChange = { input => {
+							const newArray = dosesThroughDay;
 
-						newArray[id - 1] = input;
+							// convert timestamp to 00:00 format
+							const strInput = input.toTimeString().substring(0, 5);
 
-						return newArray;
-					} }
-				/>
+							newArray[id - 1] = strInput;
+							console.log(dosesThroughDay);
+
+							return newArray;
+						} } />
+					<Divider width = { 10 } />
+				</>
 			)
 		);
 	}
@@ -88,22 +99,11 @@ export const EditEntry = ({ navigation }) => {
 						setSlot(value);
 					} }
 				/>
-				<Text> Doses per Day: { dosesPerDay } </Text>
-				<View>
-					{ /* increase dosesPerDay */ }
-					<Button
-						title = '+'
-						onPress = { () => {
-							if (dosesPerDay == 4)
-								return;
-
-							dosesThroughDay.push('');
-							setDosesPerDay(dosesPerDay + 1);
-						} }
-					/>
+				<Text> Doses per Day: { dosesPerDay + '\n' } </Text>
+				<View style = { rowAlign }>
 					{ /* decrease dosesPerDay */ }
 					<Button
-						title = '-'
+						title = '      -      '
 						onPress = { () => {
 							if (dosesPerDay == 1)
 								return;
@@ -112,8 +112,19 @@ export const EditEntry = ({ navigation }) => {
 							setDosesPerDay(dosesPerDay - 1);
 						} }
 					/>
-					{ renderDosesPerDayFields() }
+					{ /* increase dosesPerDay */ }
+					<Button
+						title = '      +      '
+						onPress = { () => {
+							if (dosesPerDay == 4)
+								return;
+
+							dosesThroughDay.push('');
+							setDosesPerDay(dosesPerDay + 1);
+						} }
+					/>
 				</View>
+				{ renderDosesPerDayFields() }
 				<ButtonGroup
 					buttons = { ['S', 'M', 'T', 'W', 'Th', 'F', 'S'] }
 					selectMultiple
