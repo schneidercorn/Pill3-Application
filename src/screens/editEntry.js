@@ -19,7 +19,8 @@ export const EditEntry = ({ navigation }) => {
 	const [ dosage, setDosage ] = useState('');
 	const [ dosesPerDay, setDosesPerDay ] = useState(1);
 	const [ dosesThroughDay, setDosesThroughDay ] = useState(['']);
-	const [ selectedDays, setSelectedDays ] = useState([ ]);
+	const [ selectedDays, setSelectedDays ] = useState([]);
+	const [ repeatOn, setRepeatOn ] = useState([]);
 	const { serial } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
@@ -59,7 +60,6 @@ export const EditEntry = ({ navigation }) => {
 							const strInput = input.toTimeString().substring(0, 5);
 
 							newArray[id - 1] = strInput;
-							console.log(dosesThroughDay);
 
 							return newArray;
 						} } />
@@ -75,10 +75,12 @@ export const EditEntry = ({ navigation }) => {
 			dosage: dosage,
 			slot: slot,
 			dosesThroughDay: dosesThroughDay,
-			repeatOn: selectedDays
+			repeatOn: repeatOn
 		};
 
-		return await pillServices.addPill(serial, pill);
+		console.log(JSON.stringify(pill, null, 4));
+
+		// return await pillServices.addPill(serial, pill);
 	}
 
 	return (
@@ -129,8 +131,17 @@ export const EditEntry = ({ navigation }) => {
 					buttons = { ['S', 'M', 'T', 'W', 'Th', 'F', 'S'] }
 					selectMultiple
 					selectedIndexes = { selectedDays }
-					onPress = { (value) => {
-						setSelectedDays(value);
+					onPress = { (selectedIndexes) => {
+						const newRepeatOn = [ false, false, false, false, false, false, false ];
+
+						for (let i = 0; i < newRepeatOn.length; i++) {
+							const dayIndex = selectedIndexes[i];
+
+							newRepeatOn[dayIndex] = true;
+						}
+
+						setSelectedDays(selectedIndexes);
+						setRepeatOn(newRepeatOn);
 					} }
 				/>
 				<Button
