@@ -16,7 +16,7 @@ export const EditEntry = ({ navigation }) => {
 	const { container, extendedScrollView, scrollForm, rowAlign } = styles;
 	const [ slot, setSlot ] = useState(1);
 	const [ name, setName ] = useState('');
-	const [ dosage, setDosage ] = useState('');
+	const [ numDispense, setNumDispense ] = useState('');
 	const [ dosesPerDay, setDosesPerDay ] = useState(1);
 	const [ dosesThroughDay, setDosesThroughDay ] = useState(['']);
 	const [ selectedDays, setSelectedDays ] = useState([]);
@@ -72,15 +72,13 @@ export const EditEntry = ({ navigation }) => {
 	async function addPill() {
 		const pill = {
 			name: name,
-			dosage: dosage,
+			numDispense: numDispense,
 			slot: slot,
 			dosesThroughDay: dosesThroughDay,
 			repeatOn: repeatOn
 		};
 
-		console.log(JSON.stringify(pill, null, 4));
-
-		// return await pillServices.addPill(serial, pill);
+		return await pillServices.addPill(serial, pill);
 	}
 
 	return (
@@ -91,8 +89,8 @@ export const EditEntry = ({ navigation }) => {
 					onChangeText = { name => setName(name) }
 				/>
 				<Input
-					label = 'Dosage'
-					onChangeText = { dosage => setDosage(dosage) }
+					label = 'Number of Pills to Dispense'
+					onChangeText = { numDispense => setNumDispense(numDispense) }
 				/>
 				<ButtonGroup
 					buttons = { [1, 2, 3] }
