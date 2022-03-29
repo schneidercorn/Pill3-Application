@@ -42,5 +42,24 @@ export const styles = {
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-evenly'
+	},
+	title: {
+		fontSize: 24,
+		textAlign: 'center',
+		paddingVertical: 20
+	},
+	pillListContainer: {
+		height: '60%',
+		width: '100%',
+		justifyContent: 'flex-start',
+		flex: 1,
+		flexDirection: 'column'
+	},
+	pillContainer: {
+		backgroundColor: 'blue',
+		width: '80%',
+		alignSelf: 'center',
+		borderRadius: 20,
+		marginVertical: 5
 	}
 };
