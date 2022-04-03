@@ -12,7 +12,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { styles } from '../styles';
 import DatePicker from 'react-native-date-picker';
 
-export const EditEntry = ({ navigation }) => {
+export const EditEntry = ({ navigation, route }) => {
 	const { container, extendedScrollView, scrollForm, rowAlign } = styles;
 	const [ slot, setSlot ] = useState(1);
 	const [ name, setName ] = useState('');
@@ -25,7 +25,23 @@ export const EditEntry = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		function load() {
+			// eslint-disable-next-line no-extra-boolean-cast
+			if (!!route.params.pill) {
+				const pill = route.params.pill;
+
+				setSlot(pill.slot);
+				setName(pill.name);
+				setNumDispense(pill.numDispense);
+				setDosesPerDay(Array.from(pill.repeatOn).map((day, i) => {
+					if (day)
+						return i;
+				}));
+			}
+		}
+
 		dispatch(loadUser());
+		load();
 	}, []);
 
 	function renderDosesPerDayFields() {
@@ -37,7 +53,7 @@ export const EditEntry = ({ navigation }) => {
 		 * i can't believe this works, but im not changing it unless neccessary.
 		 *
 		 * all it does is allows the link between id and dosesPerDay so we can
-		 * easily manage their relationship with the <DateTimePickerModal /> fields
+		 * easily manage their relationship with the <DatePicker /> fields
 		 */
 		if (length == 1) ids = [ 1 ];
 		if (length == 2) ids = [ 1, 2 ];

@@ -34,6 +34,10 @@ export const Dashboard = ({ navigation }) => {
 		return willFocusSubscription;
 	}, []);
 
+	async function getPill(name) {
+		return await pillServices.getPillFromName(serial, name);
+	}
+
 	async function getPills(serial) {
 		const raw = await pillServices.getPills(serial);
 
@@ -125,6 +129,7 @@ export const Dashboard = ({ navigation }) => {
 					friction = { 90 }
 					tension = { 100 } // These props are passed to the parent component (here TouchableScale)
 					activeScale = { 0.95 }
+					onPress = { async () => navigation.navigate('EditEntry', { pill: await getPill(pill.name) }) }
 				>
 					<ListItem.Content>
 						<ListItem.Title style = {{ color: 'white', fontWeight: 'bold' }}>
