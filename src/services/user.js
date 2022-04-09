@@ -4,7 +4,7 @@ export const createUser = async user => {
 	const { name, email, serial } = user;
 	const serialExists = await firestore()
 		.collection('serials')
-		.doc(serial)
+		.doc(String(serial))
 		.get()
 		.then(data => data.exists);
 
@@ -13,7 +13,7 @@ export const createUser = async user => {
 
 	const doc = firestore()
 		.collection('serials')
-		.doc(serial);
+		.doc(String(serial));
 
 	// serial document
 	doc.set({
@@ -30,14 +30,14 @@ export const createUser = async user => {
 export const getUserInfo = async serial => {
 	return await firestore()
 		.collection('serials')
-		.doc(serial)
+		.doc(String(serial))
 		.get();
 };
 
 export const loginUser = async serial => {
 	return firestore()
 		.collection('serials')
-		.doc(serial)
+		.doc(String(serial))
 		.get()
 		.then(data => {
 			if (data.exists) {

@@ -22,32 +22,42 @@ export const EditEntry = ({ navigation, route }) => {
 	const [ selectedDays, setSelectedDays ] = useState([]);
 	const [ repeatOn, setRepeatOn ] = useState([]);
 	const { serial } = useSelector(state => state.user);
+	const [ isLoaded, setLoaded ] = useState(false);
+	const [ isEditing, setIsEditing ] = useState(!!route.params && !!route.params.pill);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		function load() {
-			// eslint-disable-next-line no-extra-boolean-cast
-			if (!!route.params.pill) {
+		function load() {			
+			// edit pill
+			if (isEditing) {
 				const pill = route.params.pill;
 
 				setSlot(pill.slot);
 				setName(pill.name);
 				setNumDispense(pill.numDispense);
-				setDosesPerDay(Array.from(pill.repeatOn).map((day, i) => {
+				setDosesPerDay(pill.dosesThroughDay.length);
+				setDosesThroughDay(pill.dosesThroughDay);
+				setSelectedDays(pill.repeatOn.map((day, i) => {
 					if (day)
 						return i;
 				}));
+				setRepeatOn(pill.repeatOn);
 			}
 		}
-
+		
 		dispatch(loadUser());
 		load();
+
+		setLoaded(true);
 	}, []);
 
 	function renderDosesPerDayFields() {
-		const [date, setDate] = useState(new Date());
 		let ids = [ 1 ];
+		const [ date, setDate ] = useState([new Date(), new Date(), new Date(), new Date()]);
 		const length = dosesThroughDay.length;
+
+		if (!isLoaded)
+			return <Text>Loading...</Text>
 
 		/*
 		 * i can't believe this works, but im not changing it unless neccessary.
@@ -60,13 +70,26 @@ export const EditEntry = ({ navigation, route }) => {
 		if (length == 3) ids = [ 1, 2, 3 ];
 		if (length == 4) ids = [ 1, 2, 3, 4 ];
 
+		if (isEditing) {
+			ids.map(id => {
+				const timeRaw = dosesThroughDay[id - 1];
+				const timeSplit = timeRaw.split(':');
+
+				date[id - 1].setHours(timeSplit[0], timeSplit[1], 0);
+			});
+		}
+
 		return (
-			ids.map(id =>
-				<>
+			ids.map(id => {
+				const time = dosesThroughDay[id - 1];
+				const newTime = Number(time.split(':')[0] * 3600);
+				
+				return <>
 					<Text> { 'Dispense #' + id } </Text>
 					<DatePicker
+						key = { id }
 						mode = 'time'
-						date = { date }
+						date = { date[id - 1] }
 						minuteInterval = { 5 }
 						timeZoneOffsetInMinutes = { -240 }
 						onDateChange = { input => {
@@ -81,7 +104,7 @@ export const EditEntry = ({ navigation, route }) => {
 						} } />
 					<Divider width = { 10 } />
 				</>
-			)
+			})
 		);
 	}
 
@@ -94,7 +117,13 @@ export const EditEntry = ({ navigation, route }) => {
 			repeatOn: repeatOn
 		};
 
-		return await pillServices.addPill(serial, pill);
+		console.log('edit: ' + isEditing);
+		console.log('slot taken: ' + await pillServices.isSlotTaken(serial, pill.slot));
+
+		if (isEditing || !(await pillServices.isSlotTaken(serial, pill.slot)))
+			return await pillServices.addPill(serial, pill);
+
+		return;
 	}
 
 	return (
@@ -103,10 +132,12 @@ export const EditEntry = ({ navigation, route }) => {
 				<Input
 					label = 'Pill Name'
 					onChangeText = { name => setName(name) }
+					value = { name }
 				/>
 				<Input
 					label = 'Number of Pills to Dispense'
 					onChangeText = { numDispense => setNumDispense(numDispense) }
+					value = { numDispense }
 				/>
 				<ButtonGroup
 					buttons = { [1, 2, 3] }
