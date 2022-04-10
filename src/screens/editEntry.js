@@ -11,6 +11,7 @@ import { Navbar } from '../components/navbar';
 import { ScrollView } from 'react-native-gesture-handler';
 import { styles } from '../styles';
 import DatePicker from 'react-native-date-picker';
+import * as notification from '../services/notification';
 
 export const EditEntry = ({ navigation, route }) => {
 	const { container, extendedScrollView, scrollForm, rowAlign } = styles;
@@ -27,7 +28,7 @@ export const EditEntry = ({ navigation, route }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		function load() {			
+		function load() {
 			// edit pill
 			if (isEditing) {
 				const pill = route.params.pill;
@@ -44,7 +45,7 @@ export const EditEntry = ({ navigation, route }) => {
 				setRepeatOn(pill.repeatOn);
 			}
 		}
-		
+
 		dispatch(loadUser());
 		load();
 
@@ -57,7 +58,7 @@ export const EditEntry = ({ navigation, route }) => {
 		const length = dosesThroughDay.length;
 
 		if (!isLoaded)
-			return <Text>Loading...</Text>
+			return <Text>Loading...</Text>;
 
 		/*
 		 * i can't believe this works, but im not changing it unless neccessary.
@@ -83,7 +84,7 @@ export const EditEntry = ({ navigation, route }) => {
 			ids.map(id => {
 				const time = dosesThroughDay[id - 1];
 				const newTime = Number(time.split(':')[0] * 3600);
-				
+
 				return <>
 					<Text> { 'Dispense #' + id } </Text>
 					<DatePicker
@@ -103,7 +104,7 @@ export const EditEntry = ({ navigation, route }) => {
 							return newArray;
 						} } />
 					<Divider width = { 10 } />
-				</>
+				</>;
 			})
 		);
 	}
@@ -117,11 +118,14 @@ export const EditEntry = ({ navigation, route }) => {
 			repeatOn: repeatOn
 		};
 
-		console.log('edit: ' + isEditing);
-		console.log('slot taken: ' + await pillServices.isSlotTaken(serial, pill.slot));
+		if (isEditing || !(await pillServices.isSlotTaken(serial, pill.slot))) {
+			return await pillServices.addPill(serial, pill)
+				.then(async () => {
+					const pills = await pillServices.getPills(serial);
 
-		if (isEditing || !(await pillServices.isSlotTaken(serial, pill.slot)))
-			return await pillServices.addPill(serial, pill);
+					return notification.addNotifications(pills);
+				});
+		}
 
 		return;
 	}
