@@ -1,20 +1,22 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View, Text, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as pillServices from '../services/pill';
 import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
-import { BottomSheet, Button, ListItem, Tab, TabView } from 'react-native-elements';
+import { ListItem, Tab, TabView } from 'react-native-elements';
 import { Navbar } from '../components/navbar';
 import { styles } from '../styles';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 export const Dashboard = ({ navigation }) => {
 	const daysAbbr = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-	const { container, pillListContainer, pillContainer, editButton, deleteButton, title } = styles;
+	const { container, pillListContainer, pillContainer, title } = styles;
 	const { serial } = useSelector(state => state.user);
 	// finds today's day (Sunday - Saturday) in terms of indices 0 - 6
 	const [ index, setIndex] = React.useState(new Date(Date.now()).getDay());
@@ -79,8 +81,6 @@ export const Dashboard = ({ navigation }) => {
 		for (let i = 0; i < weekSeperated.length; i++)
 			weekSeperated[i] = weekSeperated[i].sort((a, b) => (a.time > b.time) ? 1 : -1);
 
-		console.log(weekSeperated);
-
 		return weekSeperated;
 	}
 
@@ -114,6 +114,22 @@ export const Dashboard = ({ navigation }) => {
 		);
 	}
 
+	const militaryTo12hour = (militaryTime) => {
+		let isPM = false;
+
+		let hours = Number(militaryTime.split(':')[0]);
+		let minutes = militaryTime.split(':')[1];
+
+		if (hours > 12) {
+			isPM = true;
+			hours -= 12;
+		}
+
+		console.log(`${ hours }:${ minutes }` + (isPM ? 'pm' : 'am'));
+
+		return `${ hours }:${ minutes }` + (isPM ? 'pm' : 'am');
+	};
+
 	function renderPills(day) {
 		return (
 			<>
@@ -126,22 +142,22 @@ export const Dashboard = ({ navigation }) => {
 						activeScale = { 0.95 }
 						onPress = { () => setEditMenuVisible(true) }
 					>
-						<ListItem.Content style = {{ flexDirection: 'row', justifyContent: 'space-around' }}>
-							<View style = {{ flexDirection: 'column' }}>
+						<ListItem.Content style = {{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+							<View style = {{ flexDirection: 'column', width: 200 }}>
 								<ListItem.Title style = {{ color: 'white', fontWeight: 'bold' }}>
 									{ pill.name }
 								</ListItem.Title>
 								<ListItem.Subtitle style = {{ color: 'white' }}>
-									{ pill.time }
+									{ militaryTo12hour(pill.time) }
 								</ListItem.Subtitle>
 							</View>
-							<Button
-								title = 'Edit'
-								onPress = { async () => navigation.navigate('EditEntry', { pill: await getPill(pill.name) }) }
-								buttonStyle = { editButton }
-							/>
-							<Button
-								title = 'Delete'
+							<TouchableOpacity onPress = { async () => navigation.navigate('EditEntry', { pill: await getPill(pill.name) }) }>
+								<FontAwesomeIcon
+									icon = { faPenToSquare }
+									size = { 24 }
+								/>
+							</TouchableOpacity>
+							<TouchableOpacity
 								onPress = { async () => {
 									Alert.alert(
 										'This will delete all ' + pill.name + ' entries',
@@ -153,13 +169,18 @@ export const Dashboard = ({ navigation }) => {
 											},
 											{
 												text: 'Delete',
-												onPress: await pillServices.deletePill(serial, await pill.name)
+												// eslint-disable-next-line max-len
+												onPress: async () => await pillServices.deletePill(serial, await pill.name)
 											}
 										  ]
 									);
 								} }
-								buttonStyle = { deleteButton }
-							/>
+							>
+								<FontAwesomeIcon
+									icon = { faTrashCan }
+									size = { 24 }
+								/>
+							</TouchableOpacity>
 						</ListItem.Content>
 					</ListItem>
 				) }

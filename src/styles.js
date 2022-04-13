@@ -73,19 +73,5 @@ export const styles = {
 		shadowRadius: 10,
 
 		elevation: 4
-	},
-	editButton: {
-		width: 80,
-		height: 40,
-		backgroundColor: 'blue',
-		borderRadius: 5,
-		padding: 0
-	},
-	deleteButton: {
-		width: 80,
-		height: 40,
-		backgroundColor: 'red',
-		borderRadius: 5,
-		padding: 0
 	}
 };
