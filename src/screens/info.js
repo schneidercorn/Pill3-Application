@@ -1,15 +1,14 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import * as userServices from '../services/user';
 import { useEffect } from 'react';
 import * as reduxServices from '../ducks/userReducers';
 import { useState } from 'react';
-import { Button } from 'react-native-elements';
+import { Button, Divider } from 'react-native-elements';
 import * as userService from '../services/user';
 import { Navbar } from '../components/navbar';
 import { styles } from '../styles';
-import { LinearGradient } from 'react-native-svg';
+import { Header } from '../components';
 
 export const Info = ({ navigation }) => {
 	const { container, form, center, reverseRowAlign } = styles;
@@ -43,11 +42,25 @@ export const Info = ({ navigation }) => {
 		return dispatch(reduxServices.userStatus(0));
 	}
 
-	if (!isLoaded)
-		return <Text>Loading</Text>;
+	if (!isLoaded) {
+		return (
+			<View style = { container }>
+				<Header heading = 'Pill3 2021-22' />
+				<Navbar
+					currentPage = '1'
+					navigation = { navigation }
+				/>
+			</View>
+		);
+	}
+
+	const infoTitle = { fontSize: 20, fontWeight: 'bold' };
+	const infoBody = { fontSize: 20 };
+	const divider = (width) => <Divider width = { width } />;
 
 	return (
 		<View style = { container }>
+			<Header heading = 'Pill3 2021-22' />
 			<View style = { reverseRowAlign }>
 				<Button
 					buttonStyle = {{ backgroundColor: 'red' }}
@@ -57,10 +70,18 @@ export const Info = ({ navigation }) => {
 				<View />
 			</View>
 			<View style = { form }>
-				<View style = { center }>
-					<Text>User: { user.name } </Text>
-					<Text>Email: { user.email } </Text>
-					<Text>Device Serial: { serial } </Text>
+				<View style = { [center, { alignItems: 'flex-start' }] }>
+					<Text style = { infoTitle }>User Information</Text>
+					{ divider(20) }
+					<Text style = { infoTitle }>User: </Text>
+					<Text style = { infoBody }>{ user.name }</Text>
+					{ divider(20) }
+					<Text style = { infoTitle }>Email: </Text>
+					<Text style = { infoBody }>{ user.email }</Text>
+					{ divider(20) }
+					<Text style = { infoTitle }>Device Serial: </Text>
+					<Text style = { infoBody }>{ serial }</Text>
+					{ divider(100) }
 				</View>
 			</View>
 			<Navbar

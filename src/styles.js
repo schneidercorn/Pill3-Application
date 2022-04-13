@@ -1,19 +1,18 @@
-import { withTheme } from "react-native-elements";
-
 export const styles = {
 	container: {
 		height: '100%',
 		width: '100%',
-		backgroundColor: 'rgba(235, 235, 255, 1)',
+		backgroundColor: 'rgba(245, 245, 255, 1)',
 		justifyContent: 'space-between',
 		flex: 1,
 		flexDirection: 'column'
 	},
 	form: {
-		width: '100%',
+		width: '50%',
 		justifyContent: 'space-around',
 		flex: 1,
-		flexDirection: 'column'
+		flexDirection: 'column',
+		alignSelf: 'center'
 	},
 	scrollForm: {
 		width: '100%',

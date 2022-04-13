@@ -226,8 +226,17 @@ export const Dashboard = ({ navigation }) => {
 		);
 	}
 
-	if (!isLoaded)
-		return <Text>Loading</Text>;
+	if (!isLoaded) {
+		return (
+			<View style = { container }>
+				<Header heading = 'Pill3 2021-22' />
+				<Navbar
+					currentPage = '1'
+					navigation = { navigation }
+				/>
+			</View>
+		);
+	}
 
 	return (
 		<View style = { container }>
