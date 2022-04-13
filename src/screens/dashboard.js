@@ -5,7 +5,7 @@ import * as pillServices from '../services/pill';
 import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
-import { ListItem, Tab, TabView } from 'react-native-elements';
+import { LinearProgress, ListItem, Tab, TabView } from 'react-native-elements';
 import { Header, Navbar } from '../components';
 import { styles } from '../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -134,7 +134,13 @@ export const Dashboard = ({ navigation }) => {
 		let hours = Number(militaryTime.split(':')[0]);
 		let minutes = militaryTime.split(':')[1];
 
-		if (hours > 12) {
+		if (hours == 0) {
+			hours = 12;
+		}
+		else if (hours == 12) {
+			isPM = true;
+		}
+		else if (hours > 12) {
 			isPM = true;
 			hours -= 12;
 		}
@@ -204,18 +210,23 @@ export const Dashboard = ({ navigation }) => {
 
 	function renderNextDispense() {
 		const calculateNextDispense = () => {
+			console.log('calculating next dispense...');
 			const now = new Date(Date.now());
 			const todayPills = pills[now.getDay()];
 
-			for (let i = 0; i < todayPills.length - 1; i++) {
+			for (let i = 0; i < todayPills.length; i++) {
 				const todayPillTime = todayPills[i].time.split(':');
-				const tomorrowPillTime = todayPills[i + 1].time.split(':');
 
-				if (Number(todayPillTime[0]) <= now.getHours() && Number(tomorrowPillTime[0]) >= now.getHours())
-					return todayPills[i + 1].name + ' at ' + militaryTo12hour(todayPills[i + 1].time);
+				const pillHour = Number(todayPillTime[0]);
+				const pillMinute = Number(todayPillTime[1]);
+
+				if (pillHour > now.getHours())
+					return todayPills[i].name + ' at ' + militaryTo12hour(todayPills[i].time);
+				else if (pillHour == now.getHours() && pillMinute >= now.getMinutes())
+					return todayPills[i].name + ' at ' + militaryTo12hour(todayPills[i].time);
 			}
 
-			return 'BROKENNNNNNNNNN';
+			return 'No more dispenses today!';
 		};
 
 		return (
@@ -230,6 +241,9 @@ export const Dashboard = ({ navigation }) => {
 		return (
 			<View style = { container }>
 				<Header heading = 'Pill3 2021-22' />
+				<View style = {{ width: '60%', alignSelf: 'center' }}>
+					<LinearProgress color = 'rgba(78, 116, 289, 1)' variant = 'indeterminate' />
+				</View>
 				<Navbar
 					currentPage = '1'
 					navigation = { navigation }

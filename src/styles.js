@@ -8,7 +8,7 @@ export const styles = {
 		flexDirection: 'column'
 	},
 	form: {
-		width: '50%',
+		width: '80%',
 		justifyContent: 'space-around',
 		flex: 1,
 		flexDirection: 'column',
@@ -32,8 +32,10 @@ export const styles = {
 		paddingLeft: 25
 	},
 	header: {
+		position: 'relative',
 		height: '40%',
-		width: '100%'
+		width: '80%',
+		alignSelf: 'center'
 	},
 	extendedScrollView: {
 		height: 200,

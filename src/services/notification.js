@@ -67,5 +67,7 @@ export const addNotifications = pills => {
 		});
 	});
 
+	PushNotification.getScheduledLocalNotifications(notifs => console.log(notifs));
+
 	return true;
 };

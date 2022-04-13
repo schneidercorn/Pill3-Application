@@ -1,3 +1,5 @@
 export const Splash = () => {
-	return null;
+	return (
+		null
+	);
 };

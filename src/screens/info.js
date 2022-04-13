@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import * as reduxServices from '../ducks/userReducers';
 import { useState } from 'react';
-import { Button, Divider } from 'react-native-elements';
+import { Button, Divider, LinearProgress } from 'react-native-elements';
 import * as userService from '../services/user';
 import { Navbar } from '../components/navbar';
 import { styles } from '../styles';
@@ -46,6 +46,9 @@ export const Info = ({ navigation }) => {
 		return (
 			<View style = { container }>
 				<Header heading = 'Pill3 2021-22' />
+				<View style = {{ width: '60%', alignSelf: 'center' }}>
+					<LinearProgress color = 'rgba(78, 116, 289, 1)' variant = 'indeterminate' />
+				</View>
 				<Navbar
 					currentPage = '1'
 					navigation = { navigation }
@@ -71,7 +74,7 @@ export const Info = ({ navigation }) => {
 			</View>
 			<View style = { form }>
 				<View style = { [center, { alignItems: 'flex-start' }] }>
-					<Text style = { infoTitle }>User Information</Text>
+					<Text style = { [ infoTitle, { alignSelf: 'center' }] }>User Information</Text>
 					{ divider(20) }
 					<Text style = { infoTitle }>User: </Text>
 					<Text style = { infoBody }>{ user.name }</Text>

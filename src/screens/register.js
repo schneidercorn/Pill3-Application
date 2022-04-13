@@ -51,9 +51,6 @@ export const Register = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
-			<View style = { header }>
-
-			</View>
 			<View style = { form }>
 				<Text> { error } </Text>
 				<Input
@@ -75,6 +72,7 @@ export const Register = ({ navigation }) => {
 				<Text>
 					{ 'Already have an Account? ' }
 					<Text
+						style = {{ color: 'rgba(78, 116, 289, 1)' }}
 						onPress = { () => navigation.navigate('Login') }
 					>
 					Log in here
