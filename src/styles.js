@@ -4,6 +4,7 @@ export const styles = {
 	container: {
 		height: '100%',
 		width: '100%',
+		backgroundColor: 'rgba(235, 235, 255, 1)',
 		justifyContent: 'space-between',
 		flex: 1,
 		flexDirection: 'column'
@@ -47,8 +48,9 @@ export const styles = {
 	},
 	title: {
 		fontSize: 24,
+		fontWeight: 'bold',
 		textAlign: 'center',
-		paddingVertical: 20
+		paddingVertical: 15
 	},
 	pillListContainer: {
 		height: '90%',
@@ -75,13 +77,25 @@ export const styles = {
 		elevation: 4
 	},
 	nextDispenseContainer: {
-		height: 125,
+		height: 110,
 		width: '100%',
-		backgroundColor: 'red',
-		borderTopLeftRadius: 40,
-		borderTopRightRadius: 40,
+		zIndex: 0,
+		backgroundColor: 'white',
+		borderTopLeftRadius: 50,
+		borderTopRightRadius: 50,
 		alignItems: 'center',
+		alignSelf: 'center',
 		justifyContent: 'center',
-		paddingBottom: 25
+		paddingBottom: 20,
+
+		shadowColor: 'black',
+		shadowOffset: {
+			width: 2,
+			height: 1
+		},
+		shadowOpacity: 1,
+		shadowRadius: 1,
+
+		elevation: 4
 	}
 };

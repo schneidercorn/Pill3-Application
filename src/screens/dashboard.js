@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as pillServices from '../services/pill';
@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
 import { ListItem, Tab, TabView } from 'react-native-elements';
-import { Navbar } from '../components/navbar';
+import { Header, Navbar } from '../components';
 import { styles } from '../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
@@ -84,13 +84,27 @@ export const Dashboard = ({ navigation }) => {
 		return weekSeperated;
 	}
 
+	// Memoize tabs
+	const tabs = useMemo(() => daysAbbr.map(day =>
+		<Tab.Item
+			title = { day }
+			titleStyle = {{ fontSize: 10 }}
+		/>
+	), []);
+
 	function renderTabItems() {
-		return daysAbbr.map(day =>
-			<Tab.Item
-				title = { day }
-				titleStyle = {{ fontSize: 10 }}
-			/>
-		);
+		return <Tab
+			value = { index }
+			onChange = { (e) => setIndex(e) }
+			scrollable
+			variant = 'primary'
+			indicatorStyle = {{
+				backgroundColor: 'white',
+				height: 3
+			}}
+		>
+			{ tabs }
+		</Tab>;
 	}
 
 	function renderTabView() {
@@ -153,6 +167,7 @@ export const Dashboard = ({ navigation }) => {
 								<FontAwesomeIcon
 									icon = { faPenToSquare }
 									size = { 24 }
+									style = {{ color: 'white' }}
 								/>
 							</TouchableOpacity>
 							<TouchableOpacity
@@ -177,6 +192,7 @@ export const Dashboard = ({ navigation }) => {
 								<FontAwesomeIcon
 									icon = { faTrashCan }
 									size = { 24 }
+									style = {{ color: 'white' }}
 								/>
 							</TouchableOpacity>
 						</ListItem.Content>
@@ -195,11 +211,6 @@ export const Dashboard = ({ navigation }) => {
 				const todayPillTime = todayPills[i].time.split(':');
 				const tomorrowPillTime = todayPills[i + 1].time.split(':');
 
-				console.log('today: ' + Number(todayPillTime[0]));
-				console.log('current hour: ' + now.getHours());
-				console.log('tomorrow: ' + Number(tomorrowPillTime[0]));
-				console.log();
-
 				if (Number(todayPillTime[0]) <= now.getHours() && Number(tomorrowPillTime[0]) >= now.getHours())
 					return todayPills[i + 1].name + ' at ' + militaryTo12hour(todayPills[i + 1].time);
 			}
@@ -209,8 +220,8 @@ export const Dashboard = ({ navigation }) => {
 
 		return (
 			<View style = { nextDispenseContainer }>
-				<Text> Next Dispense:</Text>
-				<Text> { calculateNextDispense() } </Text>
+				<Text style = {{ fontSize: 18, fontWeight: 'bold' }}> Next dispense today:</Text>
+				<Text style = {{ fontSize: 18 }}> { calculateNextDispense() } </Text>
 			</View>
 		);
 	}
@@ -220,18 +231,8 @@ export const Dashboard = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
-			<Tab
-				value = { index }
-				onChange = { (e) => setIndex(e) }
-				scrollable
-				variant = 'primary'
-				indicatorStyle = {{
-					backgroundColor: 'blue',
-					height: 3
-				}}
-			>
-				{ renderTabItems() }
-			</Tab>
+			<Header heading = 'Pill3 2021-22' />
+			{ renderTabItems() }
 			{ renderTabView() }
 			{ renderNextDispense() }
 			<Navbar

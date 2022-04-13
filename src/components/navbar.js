@@ -54,8 +54,8 @@ const styles = {
 		color: 'white'
 	},
 	circle: {
-		height: 100,
-		width: 100,
+		height: 90,
+		width: 90,
 		borderWidth: 6,
 		borderColor: 'white',
 		borderRadius: 150,

@@ -9,6 +9,9 @@ export { Login } from './screens/login';
 export { Register } from './screens/register';
 export { Splash } from './screens/splash';
 
+// Components
+export * from './components';
+
 // Services
 export * from './services/user';
 export * from './services/pill';
