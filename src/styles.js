@@ -73,5 +73,15 @@ export const styles = {
 		shadowRadius: 10,
 
 		elevation: 4
+	},
+	nextDispenseContainer: {
+		height: 125,
+		width: '100%',
+		backgroundColor: 'red',
+		borderTopLeftRadius: 40,
+		borderTopRightRadius: 40,
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingBottom: 25
 	}
 };

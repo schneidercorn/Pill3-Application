@@ -38,9 +38,6 @@ export const Navbar = ({ navigation, currentPage }) => {
 
 const styles = {
 	container: {
-		position: 'absolute',
-		flex: 1,
-		bottom: 0,
 		height: 80,
 		width: '100%'
 	},
@@ -61,9 +58,9 @@ const styles = {
 		width: 100,
 		borderWidth: 6,
 		borderColor: 'white',
-		borderRadius: 100,
+		borderRadius: 150,
 		backgroundColor: '#5194CF',
-		marginTop: -50,
+		marginTop: -45,
 		alignItems: 'center',
 		justifyContent: 'center',
 

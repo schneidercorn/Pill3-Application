@@ -16,7 +16,7 @@ export const Dashboard = ({ navigation }) => {
 	const daysAbbr = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-	const { container, pillListContainer, pillContainer, title } = styles;
+	const { container, pillListContainer, pillContainer, title, nextDispenseContainer } = styles;
 	const { serial } = useSelector(state => state.user);
 	// finds today's day (Sunday - Saturday) in terms of indices 0 - 6
 	const [ index, setIndex] = React.useState(new Date(Date.now()).getDay());
@@ -125,8 +125,6 @@ export const Dashboard = ({ navigation }) => {
 			hours -= 12;
 		}
 
-		console.log(`${ hours }:${ minutes }` + (isPM ? 'pm' : 'am'));
-
 		return `${ hours }:${ minutes }` + (isPM ? 'pm' : 'am');
 	};
 
@@ -188,6 +186,35 @@ export const Dashboard = ({ navigation }) => {
 		);
 	}
 
+	function renderNextDispense() {
+		const calculateNextDispense = () => {
+			const now = new Date(Date.now());
+			const todayPills = pills[now.getDay()];
+
+			for (let i = 0; i < todayPills.length - 1; i++) {
+				const todayPillTime = todayPills[i].time.split(':');
+				const tomorrowPillTime = todayPills[i + 1].time.split(':');
+
+				console.log('today: ' + Number(todayPillTime[0]));
+				console.log('current hour: ' + now.getHours());
+				console.log('tomorrow: ' + Number(tomorrowPillTime[0]));
+				console.log();
+
+				if (Number(todayPillTime[0]) <= now.getHours() && Number(tomorrowPillTime[0]) >= now.getHours())
+					return todayPills[i + 1].name + ' at ' + militaryTo12hour(todayPills[i + 1].time);
+			}
+
+			return 'BROKENNNNNNNNNN';
+		};
+
+		return (
+			<View style = { nextDispenseContainer }>
+				<Text> Next Dispense:</Text>
+				<Text> { calculateNextDispense() } </Text>
+			</View>
+		);
+	}
+
 	if (!isLoaded)
 		return <Text>Loading</Text>;
 
@@ -206,6 +233,7 @@ export const Dashboard = ({ navigation }) => {
 				{ renderTabItems() }
 			</Tab>
 			{ renderTabView() }
+			{ renderNextDispense() }
 			<Navbar
 				currentPage = '0'
 				navigation = { navigation }
