@@ -52,7 +52,7 @@ export const getPillFromName = async (serial, name) => {
 
 export const deletePill = async (serial, name) => {
 	let pillHash = '';
-	
+
 	await firestore()
 		.collection('serials')
 		.doc(String(serial))
@@ -64,24 +64,24 @@ export const deletePill = async (serial, name) => {
 					pillHash = doc._ref._documentPath._parts[3];
 			})
 		);
-	
+
 	if (pillHash != '') {
 		await firestore()
 			.collection('serials')
 			.doc(String(serial))
 			.collection('pills')
 			.doc(pillHash)
-			.delete()
+			.delete();
 
 		return true;
 	}
 
 	return false;
-}
+};
 
 export const isSlotTaken = async (serial, slot) => {
 	let slotTaken = false;
-	
+
 	await firestore()
 		.collection('serials')
 		.doc(String(serial))
@@ -91,11 +91,11 @@ export const isSlotTaken = async (serial, slot) => {
 			snapshot.docs.forEach(doc => {
 				if (String(slot) == doc._data.slot) {
 					slotTaken = true;
-					
+
 					return;
 				}
 			});
 		});
 
-		return slotTaken;
-}
+	return slotTaken;
+};

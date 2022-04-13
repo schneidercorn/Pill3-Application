@@ -1,3 +1,5 @@
+import { withTheme } from "react-native-elements";
+
 export const styles = {
 	container: {
 		height: '100%',
@@ -49,17 +51,41 @@ export const styles = {
 		paddingVertical: 20
 	},
 	pillListContainer: {
-		height: '60%',
-		width: '100%',
+		height: '90%',
 		justifyContent: 'flex-start',
 		flex: 1,
 		flexDirection: 'column'
 	},
 	pillContainer: {
-		backgroundColor: 'blue',
-		width: '80%',
+		backgroundColor: 'rgba(78, 116, 289, 1)',
+		width: '90%',
+		height: 60,
 		alignSelf: 'center',
-		borderRadius: 20,
-		marginVertical: 5
+		borderRadius: 12,
+		marginVertical: 5,
+
+		shadowColor: 'black',
+		shadowOffset: {
+			width: 30,
+			height: 1
+		},
+		shadowOpacity: 1,
+		shadowRadius: 10,
+
+		elevation: 4
+	},
+	editButton: {
+		width: 80,
+		height: 40,
+		backgroundColor: 'blue',
+		borderRadius: 5,
+		padding: 0
+	},
+	deleteButton: {
+		width: 80,
+		height: 40,
+		backgroundColor: 'red',
+		borderRadius: 5,
+		padding: 0
 	}
 };

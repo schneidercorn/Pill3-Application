@@ -1,22 +1,26 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, Text, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as pillServices from '../services/pill';
 import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
 import { useState } from 'react';
-import { ListItem, Tab, TabView } from 'react-native-elements';
+import { BottomSheet, Button, ListItem, Tab, TabView } from 'react-native-elements';
 import { Navbar } from '../components/navbar';
 import { styles } from '../styles';
-import { LinearGradient } from 'react-native-svg';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 export const Dashboard = ({ navigation }) => {
-	const { container, pillListContainer, pillContainer, title } = styles;
+	const daysAbbr = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+	const { container, pillListContainer, pillContainer, editButton, deleteButton, title } = styles;
 	const { serial } = useSelector(state => state.user);
-	const [index, setIndex] = React.useState(0);
+	// finds today's day (Sunday - Saturday) in terms of indices 0 - 6
+	const [ index, setIndex] = React.useState(new Date(Date.now()).getDay());
 	const [ pills, setPills ] = useState([]);
 	const [ isLoaded, setLoaded ] = useState(false);
+	const [editMenuVisible, setEditMenuVisible] = useState(false);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -75,22 +79,18 @@ export const Dashboard = ({ navigation }) => {
 		for (let i = 0; i < weekSeperated.length; i++)
 			weekSeperated[i] = weekSeperated[i].sort((a, b) => (a.time > b.time) ? 1 : -1);
 
+		console.log(weekSeperated);
+
 		return weekSeperated;
 	}
 
-	function tab(title) {
-		return (
+	function renderTabItems() {
+		return daysAbbr.map(day =>
 			<Tab.Item
-				title = { title }
+				title = { day }
 				titleStyle = {{ fontSize: 10 }}
 			/>
 		);
-	}
-
-	function renderTabItems() {
-		const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
-		return days.map(day => tab(day));
 	}
 
 	function renderTabView() {
@@ -100,47 +100,70 @@ export const Dashboard = ({ navigation }) => {
 				onChange = { setIndex }
 				animationType = 'spring'
 			>
-				{ renderTabViewItems() }
+				{
+					days.map((day, i) =>
+						<TabView.Item style = { pillListContainer }>
+							<>
+								<Text style = { title }> { day } </Text>
+								{ renderPills(pills[i]) }
+							</>
+						</TabView.Item>
+					)
+				}
 			</TabView>
-		);
-	}
-
-	function renderTabViewItems() {
-		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-		return (
-			days.map((day, i) =>
-				<TabView.Item style = { pillListContainer }>
-					<>
-						<Text style = { title }> { day } </Text>
-						{ renderPills(pills[i]) }
-					</>
-				</TabView.Item>
-			)
 		);
 	}
 
 	function renderPills(day) {
 		return (
-			day.map(pill =>
-				<ListItem
-					Component = { TouchableOpacity }
-					containerStyle = { pillContainer }
-					friction = { 90 }
-					tension = { 100 } // These props are passed to the parent component (here TouchableScale)
-					activeScale = { 0.95 }
-					onPress = { async () => navigation.navigate('EditEntry', { pill: await getPill(pill.name) }) }
-				>
-					<ListItem.Content>
-						<ListItem.Title style = {{ color: 'white', fontWeight: 'bold' }}>
-							{ pill.name }
-						</ListItem.Title>
-						<ListItem.Subtitle style = {{ color: 'white' }}>
-							{ pill.time }
-						</ListItem.Subtitle>
-					</ListItem.Content>
-				</ListItem>
-			)
+			<>
+				{ day.map(pill =>
+					<ListItem
+						Component = { View }
+						containerStyle = { pillContainer }
+						friction = { 90 }
+						tension = { 100 }
+						activeScale = { 0.95 }
+						onPress = { () => setEditMenuVisible(true) }
+					>
+						<ListItem.Content style = {{ flexDirection: 'row', justifyContent: 'space-around' }}>
+							<View style = {{ flexDirection: 'column' }}>
+								<ListItem.Title style = {{ color: 'white', fontWeight: 'bold' }}>
+									{ pill.name }
+								</ListItem.Title>
+								<ListItem.Subtitle style = {{ color: 'white' }}>
+									{ pill.time }
+								</ListItem.Subtitle>
+							</View>
+							<Button
+								title = 'Edit'
+								onPress = { async () => navigation.navigate('EditEntry', { pill: await getPill(pill.name) }) }
+								buttonStyle = { editButton }
+							/>
+							<Button
+								title = 'Delete'
+								onPress = { async () => {
+									Alert.alert(
+										'This will delete all ' + pill.name + ' entries',
+										'Are you sure you want to do that?',
+										[
+											{
+											  text: 'Cancel',
+											  style: 'cancel'
+											},
+											{
+												text: 'Delete',
+												onPress: await pillServices.deletePill(serial, await pill.name)
+											}
+										  ]
+									);
+								} }
+								buttonStyle = { deleteButton }
+							/>
+						</ListItem.Content>
+					</ListItem>
+				) }
+			</>
 		);
 	}
 
@@ -155,7 +178,7 @@ export const Dashboard = ({ navigation }) => {
 				scrollable
 				variant = 'primary'
 				indicatorStyle = {{
-					backgroundColor: 'white',
+					backgroundColor: 'blue',
 					height: 3
 				}}
 			>

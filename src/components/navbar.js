@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendar, faUser, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const Navbar = ({ navigation, currentPage }) => {
 	const { container, bar, circle, icon } = styles;
@@ -9,27 +10,27 @@ export const Navbar = ({ navigation, currentPage }) => {
 	return (
 		<View style = { container }>
 			<View style = { bar }>
-				<Pressable onPress = { () => navigation.navigate('Dashboard') }>
+				<TouchableOpacity onPress = { () => navigation.navigate('Dashboard') }>
 					<FontAwesomeIcon
 						icon = { faCalendar }
 						size = { 35 }
 						style = { currentPage == 0 ? icon : [ icon, { color: 'black' }] }
 					/>
-				</Pressable>
-				<Pressable style = { circle } onPress = { () => navigation.navigate('EditEntry') }>
+				</TouchableOpacity>
+				<TouchableOpacity style = { circle } onPress = { () => navigation.navigate('EditEntry') }>
 					<FontAwesomeIcon
 						icon = { faPlus }
 						size = { 45 }
 						style = { icon }
 					/>
-				</Pressable>
-				<Pressable onPress = { () => navigation.navigate('Info') }>
+				</TouchableOpacity>
+				<TouchableOpacity onPress = { () => navigation.navigate('Info') }>
 					<FontAwesomeIcon
 						icon = { faUser }
 						size = { 35 }
 						style = { currentPage == 1 ? icon : [ icon, { color: 'black' }] }
 					/>
-				</Pressable>
+				</TouchableOpacity>
 			</View>
 		</View>
 	);
@@ -62,8 +63,18 @@ const styles = {
 		borderColor: 'white',
 		borderRadius: 100,
 		backgroundColor: '#5194CF',
-		marginTop: -80,
+		marginTop: -50,
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
+
+		shadowColor: 'black',
+		shadowOffset: {
+			width: 30,
+			height: 1
+		},
+		shadowOpacity: 1,
+		shadowRadius: 10,
+
+		elevation: 4
 	}
 };
