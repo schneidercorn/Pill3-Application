@@ -31,10 +31,10 @@ PushNotification.configure({
 
 PushNotification.createChannel(
 	{
-		channelId: '1', // (required)
-		channelName: 'My channel', // (required)
-		channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
-		playSound: false, // (optional) default: true
+		channelId: '2', // (required)
+		channelName: 'Pill Dispenses', // (required)
+		channelDescription: 'A channel to show pill dispenses', // (optional) default: undefined.
+		playSound: true, // (optional) default: true
 		soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
 		importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
 		vibrate: true // (optional) default: true. Creates the default vibration pattern if true.
@@ -48,18 +48,20 @@ export const addNotifications = pills => {
 
 	// set times for notifications
 	pills.map(pill => {
-		pill.dosesThroughDay.map((time, index) => {
-			const id = pill.slot + index;
+		pill.dosesThroughDay.map(time => {
 			const message = `${ pill.name } is being dispensed!`;
-			const date = new Date(Date.now());
 
 			const hours = Number(time.split(':')[0]);
 			const minutes = Number(time.split(':')[1]);
 
+			const date = new Date(Date.now());
+
 			date.setHours(hours, minutes, 0);
+
+			console.log('date: ' + date);
+
 			PushNotification.localNotificationSchedule({
-				channelId: '1',
-				id: id,
+				channelId: '2',
 				message: message,
 				date: date,
 				allowWhileIdle: true
@@ -67,7 +69,7 @@ export const addNotifications = pills => {
 		});
 	});
 
-	PushNotification.getScheduledLocalNotifications(notifs => console.log(notifs));
+	PushNotification.getScheduledLocalNotifications(notifs => console.log(JSON.stringify(notifs, null, 4)));
 
 	return true;
 };

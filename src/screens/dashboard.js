@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as pillServices from '../services/pill';
@@ -22,7 +22,6 @@ export const Dashboard = ({ navigation }) => {
 	const [ index, setIndex] = React.useState(new Date(Date.now()).getDay());
 	const [ pills, setPills ] = useState([]);
 	const [ isLoaded, setLoaded ] = useState(false);
-	const [editMenuVisible, setEditMenuVisible] = useState(false);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -54,11 +53,14 @@ export const Dashboard = ({ navigation }) => {
 			let times = pill.dosesThroughDay;
 
 			times.map(time => {
-				let newPill = JSON.parse(JSON.stringify(pill));
+				try {
+					let newPill = JSON.parse(JSON.stringify(pill));
 
-				newPill.dosesThroughDay = time;
+					newPill.dosesThroughDay = time;
 
-				timeSeperated.push(newPill);
+					timeSeperated.push(newPill);
+				}
+				catch (e) { null }
 			});
 		});
 
@@ -158,7 +160,6 @@ export const Dashboard = ({ navigation }) => {
 						friction = { 90 }
 						tension = { 100 }
 						activeScale = { 0.95 }
-						onPress = { () => setEditMenuVisible(true) }
 					>
 						<ListItem.Content style = {{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
 							<View style = {{ flexDirection: 'column', width: 200 }}>
@@ -210,7 +211,6 @@ export const Dashboard = ({ navigation }) => {
 
 	function renderNextDispense() {
 		const calculateNextDispense = () => {
-			console.log('calculating next dispense...');
 			const now = new Date(Date.now());
 			const todayPills = pills[now.getDay()];
 

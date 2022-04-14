@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import * as userServices from '../services/user';
 import * as pillServices from '../services/pill';
 import { useEffect } from 'react';
 import { loadUser } from '../ducks/userReducers';
@@ -10,8 +9,8 @@ import { Button, ButtonGroup, Divider, Input } from 'react-native-elements';
 import { Navbar } from '../components/navbar';
 import { ScrollView } from 'react-native-gesture-handler';
 import { styles } from '../styles';
-import DatePicker from 'react-native-date-picker';
 import * as notification from '../services/notification';
+import DatePicker from 'react-native-date-picker';
 
 export const EditEntry = ({ navigation, route }) => {
 	const { container, extendedScrollView, scrollForm, rowAlign } = styles;
@@ -82,16 +81,13 @@ export const EditEntry = ({ navigation, route }) => {
 
 		return (
 			ids.map(id => {
-				const time = dosesThroughDay[id - 1];
-				const newTime = Number(time.split(':')[0] * 3600);
-
 				return <>
 					<Text> { 'Dispense #' + id } </Text>
 					<DatePicker
 						key = { id }
 						mode = 'time'
 						date = { date[id - 1] }
-						minuteInterval = { 5 }
+						// minuteInterval = { 5 }
 						timeZoneOffsetInMinutes = { -240 }
 						onDateChange = { input => {
 							const newArray = dosesThroughDay;
@@ -120,11 +116,7 @@ export const EditEntry = ({ navigation, route }) => {
 
 		if (isEditing || !(await pillServices.isSlotTaken(serial, pill.slot))) {
 			return await pillServices.addPill(serial, pill)
-				.then(async () => {
-					const pills = await pillServices.getPills(serial);
-
-					return notification.addNotifications(pills);
-				});
+				.then(async () => notification.addNotifications(await pillServices.getPills(serial)));
 		}
 
 		return;
